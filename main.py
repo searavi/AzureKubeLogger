@@ -10,8 +10,12 @@ import logging
 import signal
 import threading
 import time
+from dotenv import load_dotenv
 from telemetry_worker import TelemetryWorker
 from config import Config
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(
