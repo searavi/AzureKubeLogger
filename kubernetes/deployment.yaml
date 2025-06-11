@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telemetry-worker
+  namespace: monitoring
+  labels:
+    app: telemetry-worker
+    version: v1.0.0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telemetry-worker
+  template:
+    metadata:
+      labels:
+        app: telemetry-worker
+    spec:
+      containers:
+      - name: telemetry-worker
+        image: telemetry-worker:latest
+        imagePullPolicy: Always
+        env:
+        - name: NEW_RELIC_LICENSE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: newrelic-secret
+              key: license-key
+        - name: NEW_RELIC_APP_NAME
+          value: "Azure-K8s-Telemetry-Worker"
+        - name: MONITORING_INTERVAL
+          value: "30"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: ENVIRONMENT
+          value: "production"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: database-url
+              optional: true
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - python
+            - -c
+            - "import psutil; exit(0 if psutil.Process().is_running() else 1)"
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          exec:
+            command:
+            - python
+            - -c
+            - "import psutil; exit(0 if psutil.Process().is_running() else 1)"
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: newrelic-secret
+  namespace: monitoring
+type: Opaque
+data:
+  # Base64 encoded New Relic license key
+  # echo -n "your-license-key" | base64
+  license-key: ""
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-secret
+  namespace: monitoring
+type: Opaque
+data:
+  # Base64 encoded database URL
+  # echo -n "postgresql://user:pass@host:port/db" | base64
+  database-url: ""
