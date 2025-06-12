@@ -1,24 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: telemetry-worker
+  name: azurekubelogger
   namespace: monitoring
   labels:
-    app: telemetry-worker
+    app: azurekubelogger
     version: v1.0.0
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: telemetry-worker
+      app: azurekubelogger
   template:
     metadata:
       labels:
-        app: telemetry-worker
+        app: azurekubelogger
     spec:
+      imagePullSecrets:
+      - name: acr-secret
       containers:
-      - name: telemetry-worker
-        image: telemetry-worker:latest
+      - name: azurekubelogger
+        image: cogstakacr.azurecr.io/azurekubelogger:latest
         imagePullPolicy: Always
         env:
         - name: NEW_RELIC_LICENSE_KEY
@@ -27,7 +29,7 @@ spec:
               name: newrelic-secret
               key: license-key
         - name: NEW_RELIC_APP_NAME
-          value: "Azure-K8s-Telemetry-Worker"
+          value: "azurekubelogger"
         - name: MONITORING_INTERVAL
           value: "30"
         - name: LOG_LEVEL
