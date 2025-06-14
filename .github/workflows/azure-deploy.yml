@@ -9,7 +9,7 @@ on:
 env:
   AZURE_CONTAINER_REGISTRY: cogstakacr                # e.g., myacr
   RESOURCE_GROUP: cogstak-realtime-services           # e.g., AzureKubeLoggerRG
-  CLUSTER_NAME: <your-aks-cluster-name>               # e.g., AzureKubeLoggerAKS
+  CLUSTER_NAME: cogstak-aks-cluster                   # e.g., AzureKubeLoggerAKS
   IMAGE_NAME: azurekubelogger                         # Image name in ACR
   IMAGE_TAG: ${{ github.sha }}                        # Use commit SHA as the image tag
 
