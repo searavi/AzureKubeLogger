@@ -54,6 +54,7 @@ jobs:
       uses: azure/k8s-deploy@v4
       with:
         manifests: |
+          kubernetes/namespace.yaml
           kubernetes/deployment.yaml
           kubernetes/service.yaml
         images: |
