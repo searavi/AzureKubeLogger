@@ -43,7 +43,7 @@ jobs:
         push: true
         tags: |
           ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} 
-          ${{env.AZURE_CONTAINER_REGISTRY}}.azurecr.io/${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}:latest
+          ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
 
     - name: Set AKS context
       uses: azure/aks-set-context@v3
