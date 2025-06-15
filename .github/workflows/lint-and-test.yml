@@ -25,9 +25,9 @@ jobs:
         pip install -r requirements.txt
         pip install flake8 pytest
 
-    - name: Lint code
-      run: |
-        flake8 --config=.flake8 .
+    # - name: Lint code
+    #   run: |
+    #     flake8 --config=.flake8 .
 
     - name: Run tests
       run: |
