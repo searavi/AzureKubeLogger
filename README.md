@@ -1,3 +1,6 @@
+![Lint and Test](https://github.com/searavi/AzureKubeLogger/actions/workflows/lint-and-test.yml/badge.svg)
+![Preview Deploy](https://github.com/searavi/AzureKubeLogger/actions/workflows/preview-deploy.yml/badge.svg)
+
 # Azure Kubernetes Infrastructure Telemetry Worker
 
 A Python-based telemetry simulation service that generates realistic monitoring scenarios for Azure Kubernetes infrastructure and sends comprehensive metrics to New Relic.
@@ -32,6 +35,17 @@ This service simulates production-grade infrastructure telemetry for:
     ├── storage_simulator.py      # Azure Blob Storage simulation
     ├── network_simulator.py      # Network latency simulation
     └── system_monitor.py         # Real system metrics
+```
+
+## Development Workflow
+
+- Use GitHub Actions to automatically lint and test code on every push or pull request.
+- Local linting is optional but encouraged via:
+
+```bash
+make lint     # Run flake8 manually
+make test     # Run pytest
+make deploy   # Deploy via GitHub Actions pipeline
 ```
 
 ## Installation
