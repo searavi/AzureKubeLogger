@@ -1,25 +1,29 @@
 name: Build and Deploy to AKS
 
 on:
-  push:
-    branches:
-      - main
-      - feature/azure-deploy
+  workflow_run:
+    workflows: ["Lint and Test"]
+    branches: [main]
+    types:
+      - completed
 
 env:
   AZURE_CONTAINER_REGISTRY: cogstakacr                # e.g., myacr
   RESOURCE_GROUP: cogstak-realtime-services           # e.g., AzureKubeLoggerRG
   CLUSTER_NAME: cogstak-aks-cluster                   # e.g., AzureKubeLoggerAKS
   IMAGE_NAME: azurekubelogger                         # Image name in ACR
-  IMAGE_TAG: ${{ github.sha }}                        # Use commit SHA as the image tag
+  IMAGE_TAG: ${{ github.event.workflow_run.head_sha }}                        # Use commit SHA from the triggering workflow
 
 jobs:
   build-and-deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.workflow_run.head_sha }}
 
     - name: Log in to Azure
       uses: azure/login@v1
@@ -61,5 +65,4 @@ jobs:
           kubernetes/service.yaml
         images: |
           ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-        namespace: |
-          monitoring
+        namespace: monitoring
