@@ -46,7 +46,7 @@ jobs:
         resource-group: ${{ env.RESOURCE_GROUP }}
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Deploy to dev namespace
+    - name: Deploy to monitoring namespace
       uses: azure/k8s-deploy@v4
       with:
         manifests: |
@@ -54,4 +54,4 @@ jobs:
           kubernetes/service.yaml
         images: |
           ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-        namespace: dev
+        namespace: monitoring
