@@ -18,7 +18,7 @@ COPY . .
 RUN useradd -ms /bin/bash vscode \
     && echo 'vscode ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-USER vscode
+# USER vscode
 
 # Return to root before creating another user
 USER root
@@ -41,3 +41,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 
 # Run the telemetry worker
 CMD ["python", "main.py"]
+
+USER vscode
