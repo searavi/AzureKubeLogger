@@ -14,6 +14,12 @@ RUN pip install --no-cache-dir .
 # Copy application code
 COPY . .
 
+# vscode
+RUN useradd -ms /bin/bash vscode \
+    && echo 'vscode ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+USER vscode
+
 # Create non-root user
 RUN groupadd -r telemetry && useradd -r -g telemetry telemetry
 RUN chown -R telemetry:telemetry /app
@@ -33,8 +39,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 # Run the telemetry worker
 CMD ["python", "main.py"]
 
-# vscode
-RUN useradd -ms /bin/bash vscode \
-    && echo 'vscode ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-USER vscode
