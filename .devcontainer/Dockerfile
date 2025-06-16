@@ -20,6 +20,9 @@ RUN useradd -ms /bin/bash vscode \
 
 USER vscode
 
+# Return to root before creating another user
+USER root
+
 # Create non-root user
 RUN groupadd -r telemetry && useradd -r -g telemetry telemetry
 RUN chown -R telemetry:telemetry /app
